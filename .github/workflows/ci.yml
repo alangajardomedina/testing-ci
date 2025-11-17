@@ -1,0 +1,27 @@
+name: CI - Build & Test
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout del código
+              uses: actions/checkout@ev3
+            
+            - name: Usar Node.js
+              uses: actions/setup-node@v3
+            
+            - name: Instalar dependencias
+              uses: npm install
+
+            - name: Ejecutar pruebas
+              uses: npm test
+
+            - name: Compilar proyecto
+              uses: npm run build
