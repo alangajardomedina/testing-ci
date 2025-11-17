@@ -5,10 +5,14 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch: #permite ejecutar manualmente el workflow
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16,18]
 
     steps:
       - name: Checkout del código
@@ -17,8 +21,14 @@ jobs:
       - name: Usar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
-          
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Cache de dependencias
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
       - name: Instalar dependencias
         run: npm install
 
@@ -27,6 +37,9 @@ jobs:
 
       - name: Compilar proyecto
         run: npm run build
+      
+      - name: Listar archivos finales
+        run: ls -la
 
       - name: Construir Docker imagen
         run: |
@@ -34,7 +47,7 @@ jobs:
       
       - name: Levantar container para prueba
         run: |
-          docker run -d -p 3000:3000 --name test-container mi-proyecto:lastest
+          docker run -d -p 3000:3000 --name test-container mi-proyecto:latest
           sleep 5
           curl -f http://localhost:3000/ || (echo "Error: la app no responder" && exit 1)
           docker stop test-container
