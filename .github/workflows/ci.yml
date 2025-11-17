@@ -10,9 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16,18]
 
     steps:
       - name: Checkout del código
@@ -21,7 +18,7 @@ jobs:
       - name: Usar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18'
       
       - name: Instalar dependencias
         run: npm install
