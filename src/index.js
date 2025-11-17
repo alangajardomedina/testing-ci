@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 app.get('/',(req,res) => {
-    res.send('Servidor levantado correctamente')
+    res.send('Servidor levantado mal')
 })
 
 module.exports = app
