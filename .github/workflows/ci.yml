@@ -27,3 +27,15 @@ jobs:
 
       - name: Compilar proyecto
         run: npm run build
+
+      - name: Construir Docker imagen
+        run: |
+          docker build -t mi-proyecto:latest
+      
+      - name: Levantar container para prueba
+        run: |
+          docker run -d -p 3000:3000 --name test-container mi-proyecto:lastest
+          sleep 5
+          curl -f http://localhost:3000/ || (echo "Error: la app no responder" && exit 1)
+          docker stop test-container
+          docker rm test-container
