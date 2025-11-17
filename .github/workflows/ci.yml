@@ -30,7 +30,7 @@ jobs:
 
       - name: Construir Docker imagen
         run: |
-          docker build -t mi-proyecto:latest
+          docker build -t mi-proyecto:latest .
       
       - name: Levantar container para prueba
         run: |
